@@ -1,0 +1,53 @@
+#!/usr/bin/ksh
+################################################################################
+#
+# SQL dataload
+#
+# Description:
+#   This script is the wrapper script which calls SQLPLUS to generate the CSV file and loads the data from
+#   the file into the table using SQLLoader
+# 
+################################################################################
+ 
+ ----Declare the parameters
+ 
+User_name=$1
+Password=$2
+File_name=$3 export File_name
+ 
+Directory_Path=/home/dev_team/source_data  export Directory_Path
+ 
+rm $Directory_Path/${File_name}_log.dat
+ 
+if [ $# -ne 3 ]
+then 
+ echo "Invalid no. of parameters-Check the parameters" > $Directory_Path/${File_name}_log.dat
+exit
+else
+ 
+ # Populating the data into a file
+ 
+echo "Start Executing SQLPLUS  for generating CSVFILE" >> $Directory_Path/${File_name}_log.dat
+sqlplus $User_name@ORADEV1/$Password  @ $Directory_Path/$File_name.sql
+ if [ $? -ne 0 ] 
+ then
+ echo "SQLPlus failed for data generation"
+echo " Exiting from the environment- Check the reason for the sql plus failure"
+exit
+ else
+ echo  "SQLPlus sucess for data generation" >> $Directory_Path/${File_name}_log.dat
+ fi
+ fi
+ 
+# Running the Sql Loader for data population
+ 
+echo "SQL LOADER FOR $File_name HAS STARTED" >> $Directory_Path/${File_name}_log.dat
+echo "SQL LOADER FOR $File_name is  running" >> $Directory_Path/${File_name}_log.dat
+sqlldr $User_name@ORADEV1/$Password control=$File_name.ctl
+if [ $? -ne 0 ] 
+ then
+ echo "SQLloader failed- Check the ${File_name}.bad for errors" >> $Directory_Path/${File_name}_log.dat
+ else
+ echo "SQLloader sucess/data load completed" >> $Directory_Path/${File_name}_log.dat
+ fi
+exit
