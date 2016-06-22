@@ -9,13 +9,13 @@
 # 
 ################################################################################
  
- ----Declare the parameters
+###Declare the parameters##############
  
 User_name=$1
 Password=$2
 File_name=$3 export File_name
  
-Directory_Path=/home/dev_team/source_data  export Directory_Path
+Directory_Path=/home/dev_team/source_data  export Directory_Path ---Set your own path here 
  
 rm $Directory_Path/${File_name}_log.dat
  
