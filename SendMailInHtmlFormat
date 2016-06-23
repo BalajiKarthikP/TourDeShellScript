@@ -1,0 +1,44 @@
+echo "From: balaeee111@gmail.com" >htmltest.txt
+echo "To: balaeee111@gmail.com" >>htmltest.txt
+echo "MIME-Version: 1.0" >>htmltest.txt
+
+datetime=`date +%Y-%m-%d/%H:%M`
+echo "Subject: Generate mail in HTML format $datetime" >>htmltest.txt
+echo "Content-Type: text/html" >>htmltest.txt
+
+
+set -x
+
+#*************Table 1 *****************************************
+
+
+
+echo "<u> <b> <font size="3" > Table 1  </font> </b> </u>" >>htmltest.txt
+
+awk -F',' 'BEGIN{print "<br> </br> <table border=1 style=width:80%>"} {print "<tr>";for(i=1;i<=NF;i++)print "<td>" $i"</td>";print "</tr>"} END{print "</table>"}' /home/bkarthik/table1_in_csv.csv >>htmltest.txt
+
+echo "<p>" >>htmltest.txt
+
+echo "&nbsp;</p>" >>htmltest.txt
+
+
+#********************************************************************
+
+#*************Table 2*****************************************
+
+
+echo "<u> <b> <font size="3" > Table 2 </font> </b> </u>" >>htmltest.txt
+
+awk -F',' 'BEGIN{print "<br> </br> <table border=1 style=width:80%>"} {print "<tr>";for(i=1;i<=NF;i++)print "<td>" $i"</td>";print "</tr>"} END{print "</table>"}' /home/bkarthik/table2_in_csv.csv >>htmltest.txt
+
+echo "<p>" >>htmltest.txt
+
+echo "&nbsp;</p>" >>htmltest.txt
+
+
+#********************************************************************
+
+
+cat htmltest.txt | sendmail balaeee111@gmail.com
+
+set +x
